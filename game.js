@@ -68,7 +68,7 @@ const soalBabak1 = [
 const soalBabak2 = [
     { tanya: "Massa 40 kg, g=10. Berapa Gaya Berat (Newton)? (W = m x g)", jawab: "400" },
     { tanya: "Dorong batu 10 kg gaya 50 N. Berapa percepatannya (m/s²)? (a = F/m)", jawab: "5" },
-    { tanya: "Tarik 20 N ke kanan, gesek 5 N ke kiri. Resultan (N)?", jawab: "15" }
+    { tanya: "Tarik 20 N ke kanan, gesek 5 N ke kiri. Resultan (N)?", jawab: "15" },
     { tanya: "Benda bermassa 5 kg diberi percepatan 4 m/s². Berapa gaya yang bekerja pada benda tersebut (Newton)? (F = m x a)", jawab: "20" },
     { tanya: "Gaya sebesar 30 N bekerja pada benda bermassa 6 kg. Berapa percepatan yang dialami benda (m/s²)? (a = F / m)", jawab: "5" },
     { tanya: "Sebuah lemari ditarik dengan gaya 50 N sehingga mengalami percepatan 10 m/s². Berapa massa lemari tersebut (kg)? (m = F / a)", jawab: "5" },
