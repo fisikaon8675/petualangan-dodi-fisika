@@ -22,15 +22,20 @@ const game = new Phaser.Game(config);
 let dodi;
 let platforms;
 let cursors;
-let misteriBox; // Variabel baru untuk item soal fisika
+let misteriBox;
+let pemburu;
+let portal;
+let punyaToken = false; // Memori untuk mengingat apakah Dodi sudah menjawab benar
 
 function preload() {
     this.load.image('langit', 'https://labs.phaser.io/assets/skies/sky1.png');
     this.load.image('tanah', 'https://labs.phaser.io/assets/sprites/platform.png');
     this.load.spritesheet('dodi', 'https://labs.phaser.io/assets/sprites/dude.png', { frameWidth: 32, frameHeight: 48 });
-    
-    // Memuat gambar bintang sebagai "Misteri Box"
     this.load.image('bintang', 'https://labs.phaser.io/assets/sprites/star.png');
+    
+    // Memuat aset baru: Pemburu (musuh) dan Portal (garis finish)
+    this.load.image('pemburu', 'https://labs.phaser.io/assets/sprites/space-baddie.png');
+    this.load.image('portal', 'https://labs.phaser.io/assets/sprites/diamond.png');
 }
 
 function create() {
@@ -50,38 +55,49 @@ function create() {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    // --- FITUR BARU LANGKAH 4 --- //
-    
-    // Menambahkan Bintang di posisi x: 600, y: 450
-    misteriBox = this.physics.add.image(600, 450, 'bintang');
+    // 1. Misteri Box (Geser sedikit ke kiri agar tidak menempel dengan pemburu)
+    misteriBox = this.physics.add.image(450, 450, 'bintang');
     this.physics.add.collider(misteriBox, platforms);
-
-    // Mendeteksi tabrakan (overlap) antara Dodi dan Bintang.
-    // Jika bersentuhan, jalankan fungsi "sentuhKotakMisteri"
     this.physics.add.overlap(dodi, misteriBox, sentuhKotakMisteri, null, this);
 
-    // Logika tombol "Jawab" pada HTML
-    document.getElementById('submit-btn').addEventListener('click', function() {
+    // 2. Pemburu (Menghalangi jalan ke portal)
+    pemburu = this.physics.add.sprite(600, 450, 'pemburu').setScale(1.5);
+    this.physics.add.collider(pemburu, platforms);
+    this.physics.add.collider(dodi, pemburu, sentuhPemburu, null, this); // Jika Dodi menabrak pemburu
+
+    // 3. Portal (Disembunyikan di awal game)
+    portal = this.physics.add.image(750, 450, 'portal');
+    this.physics.add.collider(portal, platforms);
+    portal.setVisible(false); // Sembunyikan gambar portal
+    this.physics.add.overlap(dodi, portal, masukPortal, null, this); // Jika Dodi mencapai portal
+
+    // Logika Tombol Jawab (Menggunakan onclick agar lebih stabil saat level diulang)
+    document.getElementById('submit-btn').onclick = () => {
         let jawaban = document.getElementById('answer-input').value;
         let teksFeedback = document.getElementById('feedback-text');
         
-        // Jawaban yang benar adalah 5 (karena 10 meter / 2 detik = 5 m/s)
         if (jawaban == "5") {
-            teksFeedback.innerText = "Tepat Sekali! Rumus: v = s / t (10/2 = 5). Kamu dapat Token!";
+            teksFeedback.innerText = "Benar! (v = s/t). Kamu dapat Token. Pemburu lari ketakutan!";
             teksFeedback.style.color = "green";
+            punyaToken = true; // Tandai bahwa Dodi sudah punya token
             
-            // Setelah 2 detik, sembunyikan soal dan lanjutkan game
             setTimeout(() => {
                 document.getElementById('ui-container').classList.add('hidden');
-                misteriBox.disableBody(true, true); // Hilangkan bintang dari layar
-                game.scene.scenes[0].physics.resume(); // Jalankan waktu game kembali
+                misteriBox.disableBody(true, true); 
+                
+                // Kalahkan pemburu dan munculkan portal
+                pemburu.disableBody(true, true); 
+                portal.setVisible(true); 
+                
+                // Lanjutkan game
+                game.scene.scenes[0].physics.resume(); 
             }, 2000);
             
         } else {
-            teksFeedback.innerText = "Salah! Coba ingat rumusnya (Kecepatan = Jarak dibagi Waktu).";
+            teksFeedback.innerText = "Salah! Ingat, kecepatan awal = jarak / waktu (10 / 2).";
             teksFeedback.style.color = "red";
         }
-    });
+    };
 }
 
 function update() {
@@ -101,19 +117,35 @@ function update() {
     }
 }
 
-// Fungsi yang dipanggil saat Dodi menyentuh Bintang
-function sentuhKotakMisteri(dodi, kotak) {
-    // 1. Hentikan waktu dan gerakan game
+// Fungsi Tabrakan dengan Pemburu
+function sentuhPemburu(dodi_obj, pemburu_obj) {
+    this.physics.pause(); // Hentikan game
+    dodi_obj.setTint(0xff0000); // Warnai Dodi jadi merah
+    dodi_obj.anims.play('turn');
+    
+    // Beri peringatan dan ulang level dari awal
+    setTimeout(() => {
+        alert("Oh tidak! Dodi tertangkap pemburu. Ayo coba lagi dari awal!");
+        punyaToken = false; // Reset token
+        this.scene.restart(); // Fitur Phaser untuk mengulang layar
+    }, 500);
+}
+
+// Fungsi Tabrakan dengan Bintang Soal
+function sentuhKotakMisteri(dodi_obj, kotak_obj) {
     this.physics.pause();
-    dodi.anims.play('turn'); // Paksa Dodi menghadap depan
-    
-    // 2. Tampilkan HTML UI Soal
+    dodi_obj.anims.play('turn');
     document.getElementById('ui-container').classList.remove('hidden');
-    
-    // 3. Masukkan Soal Fisika ke dalam HTML
     document.getElementById('question-desc').innerText = "Jembatan putus! Dodi harus melompat sejauh 10 meter. Jika ia akan berada di udara selama 2 detik, berapa kecepatan awal horisontal (m/s) yang dibutuhkan Dodi? (Abaikan gesekan udara)";
-    
-    // 4. Bersihkan kolom input dari jawaban sebelumnya (jika ada)
     document.getElementById('answer-input').value = "";
     document.getElementById('feedback-text').innerText = "";
+}
+
+// Fungsi Memasuki Portal Kemenangan
+function masukPortal(dodi_obj, portal_obj) {
+    if (punyaToken === true) {
+        this.physics.pause();
+        alert("SELAMAT! Dodi berhasil melewati Babak 1: Tepi Hutan. Bersiap untuk Babak 2!");
+        // Di masa depan, kita akan menambahkan kode untuk pindah ke Peta Babak 2 di sini.
+    }
 }
