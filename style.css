@@ -1,0 +1,74 @@
+/* Mengatur layar dan background dasar */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #2d2d2d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Mencegah scroll di browser */
+}
+
+/* Memberi bayangan pada pinggiran game */
+#game-container {
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+/* --- STYLING UNTUK POP-UP SOAL FISIKA --- */
+#ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75); /* Efek gelap transparan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Memastikan pop-up ada di atas game */
+}
+
+/* Class penting untuk menyembunyikan elemen */
+.hidden {
+    display: none !important;
+}
+
+#question-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+#question-box input {
+    padding: 10px;
+    margin: 15px 0;
+    width: 80%;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+#question-box button {
+    padding: 10px 25px;
+    background-color: #2E8B57; /* Hijau hutan */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#question-box button:hover {
+    background-color: #1f5f3b;
+}
+
+#feedback-text {
+    font-weight: bold;
+    margin-top: 15px;
+}
