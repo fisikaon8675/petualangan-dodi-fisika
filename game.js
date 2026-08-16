@@ -63,7 +63,6 @@ const soalBabak1 = [
     { tanya: "Buah kelapa jatuh bebas dari pohon dan mencapai tanah dalam 2 sekon (g = 10 m/s²). Berapa ketinggian jatuhnya (meter)? (h = 1/2 x g x t²)", jawab: "20" },
     { tanya: "Truk direm dari kecepatan 8 m/s hingga berhenti dengan perlambatan 2 m/s². Berapa jarak pengeremannya (meter)? (s = v0² / (2 x a))", jawab: "16" },
     { tanya: "Kereta dipercepat 5 m/s² dari kecepatan 10 m/s hingga mencapai 35 m/s. Berapa waktu yang diperlukan (sekon)? (t = (vt - v0) / a)", jawab: "5" }
-]
 ];
 const soalBabak2 = [
     { tanya: "Massa 40 kg, g=10. Berapa Gaya Berat (Newton)? (W = m x g)", jawab: "400" },
@@ -94,7 +93,6 @@ const soalBabak3 = [
     { tanya: "Mobil mainan bermassa 4 kg dipercepat dari kecepatan 2 m/s menjadi 4 m/s. Berapa usaha yang dilakukan (Joule)? (W = 1/2 x m x (vt² - v0²))", jawab: "24" },
     { tanya: "Benda bermassa 6 kg memiliki energi potensial 300 Joule (g = 10 m/s²). Berapa ketinggian benda tersebut (meter)? (h = EP / (m x g))", jawab: "5" },
     { tanya: "Benda bermassa 2 kg memiliki energi kinetik 64 Joule. Berapa kecepatan benda tersebut (m/s)? (v = √( (2 x EK) / m ))", jawab: "8" }
-]
 ];
 
 function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
