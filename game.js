@@ -1,4 +1,3 @@
-// Konfigurasi Dunia Game
 const config = {
     type: Phaser.AUTO,
     width: 800,
@@ -7,7 +6,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 800 }, // Percepatan gravitasi (semakin besar, jatuh semakin cepat)
+            gravity: { y: 800 }, 
             debug: false
         }
     },
@@ -20,44 +19,77 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-// Variabel global agar bisa diakses di semua fungsi
+// Kita tambahkan variabel 'cursors' untuk mendeteksi tombol keyboard
 let dodi;
 let platforms;
+let cursors; 
 
-// 1. PRELOAD: Memuat memori gambar sebelum game dimulai
 function preload() {
-    // Meminjam gambar sementara dari server Phaser agar Anda tidak perlu repot mengunggah gambar saat ini
     this.load.image('langit', 'https://labs.phaser.io/assets/skies/sky1.png');
     this.load.image('tanah', 'https://labs.phaser.io/assets/sprites/platform.png');
-    this.load.image('dodi', 'https://labs.phaser.io/assets/sprites/dude.png');
+    
+    // PENTING: Kita ubah Dodi menjadi 'spritesheet' agar bisa dianimasikan saat berjalan
+    this.load.spritesheet('dodi', 'https://labs.phaser.io/assets/sprites/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
 
-// 2. CREATE: Menempatkan objek ke dalam layar
 function create() {
-    // A. Menambahkan background langit (koordinat x: 400, y: 300 adalah titik tengah layar)
+    // Latar belakang dan tanah
     this.add.image(400, 300, 'langit');
-
-    // B. Membuat Tanah (Benda Statis / Hukum I Newton: akan tetap diam)
     platforms = this.physics.add.staticGroup();
-    
-    // Meletakkan tanah di bawah layar dan memperbesar ukurannya 2 kali lipat (setScale)
     platforms.create(400, 568, 'tanah').setScale(2).refreshBody();
 
-    // C. Memunculkan Dodi (Benda Dinamis / Akan ditarik oleh gravitasi bumi)
+    // Memunculkan Dodi
     dodi = this.physics.add.sprite(100, 450, 'dodi');
-    
-    // Memberikan sifat elastis (Pantulan/Restitusi). Nilai 0.2 berarti memantul sedikit.
     dodi.setBounce(0.2);
-    
-    // Membatasi Dodi agar tidak jatuh menembus batas kanvas game
     dodi.setCollideWorldBounds(true);
-
-    // D. Hukum Aksi-Reaksi (Kolisi)
-    // Memerintahkan mesin fisika agar Dodi berpijak pada tanah (tidak tembus)
     this.physics.add.collider(dodi, platforms);
+
+    // MEMBUAT ANIMASI BERJALAN
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('dodi', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'dodi', frame: 4 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dodi', { start: 5, end: 8 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    // Mengaktifkan sensor tombol panah pada keyboard
+    cursors = this.input.keyboard.createCursorKeys();
 }
 
-// 3. UPDATE: Logika berulang (dikosongkan dulu untuk langkah 3 nanti)
+// 3. UPDATE: Di sinilah logika pergerakan (Kinematika) terjadi!
 function update() {
-    // Menunggu Langkah 3...
+    // JIKA tombol panah kiri ditekan...
+    if (cursors.left.isDown) {
+        dodi.setVelocityX(-160); // Kecepatan ke sumbu X negatif (kiri)
+        dodi.anims.play('left', true); // Mainkan animasi kiri
+    } 
+    // JIKA tombol panah kanan ditekan...
+    else if (cursors.right.isDown) {
+        dodi.setVelocityX(160); // Kecepatan ke sumbu X positif (kanan)
+        dodi.anims.play('right', true); // Mainkan animasi kanan
+    } 
+    // JIKA tidak ada tombol ditekan...
+    else {
+        dodi.setVelocityX(0); // Kecepatan 0 (Hukum I Newton: Diam)
+        dodi.anims.play('turn'); // Mainkan animasi menghadap depan
+    }
+
+    // MELOMPAT (Gerak Vertikal ke Atas)
+    // Syarat melompat: Tombol atas ditekan DAN kaki Dodi menyentuh tanah
+    if (cursors.up.isDown && dodi.body.touching.down) {
+        dodi.setVelocityY(-550); // Memberikan kecepatan awal ke atas (melawan gravitasi)
+    }
 }
