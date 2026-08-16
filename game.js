@@ -53,6 +53,9 @@ if (!document.getElementById('gembok-container')) document.body.insertAdjacentHT
 // DATA BANK SOAL FISIKA (BINTANG)
 // ==========================================
 const soalBabak1 = [
+    { tanya: "Jarak jembatan 10 m. Dodi melayang 2 s, berapa kecepatan awalnya (m/s)? (v = s/t)", jawab: "5" },
+    { tanya: "Dodi berlari 4 m/s selama 3 s. Berapa jarak tempuhnya (meter)? (s = v x t)", jawab: "12" },
+    { tanya: "Dari keadaan diam, percepatan 2 m/s². Kecepatannya setelah 4 s adalah (m/s)? (v = a x t)", jawab: "8" },
     { tanya: "Jarak tempuh sebuah mobil adalah 20 meter dan ditempuh dalam waktu 4 sekon. Berapa kecepatannya (m/s)? (v = s / t)", jawab: "5" },
     { tanya: "Sebuah sepeda bergerak dengan kecepatan konstan 15 m/s selama 3 sekon. Berapa jarak yang ditempuhnya (meter)? (s = v x t)", jawab: "45" },
     { tanya: "Benda diam mengalami percepatan konstan 3 m/s². Berapa kecepatannya setelah 5 sekon (m/s)? (v = a x t)", jawab: "15" },
@@ -61,8 +64,7 @@ const soalBabak1 = [
     { tanya: "Sepeda motor menambah kecepatan dari 10 m/s menjadi 30 m/s dalam waktu 5 sekon. Berapa percepatannya (m/s²)? (a = (vt - v0) / t)", jawab: "4" },
     { tanya: "Dari keadaan diam, mobil balap dipercepat 4 m/s² selama 3 sekon. Berapa jarak yang ditempuhnya (meter)? (s = 1/2 x a x t²)", jawab: "18" },
     { tanya: "Buah kelapa jatuh bebas dari pohon dan mencapai tanah dalam 2 sekon (g = 10 m/s²). Berapa ketinggian jatuhnya (meter)? (h = 1/2 x g x t²)", jawab: "20" },
-    { tanya: "Truk direm dari kecepatan 8 m/s hingga berhenti dengan perlambatan 2 m/s². Berapa jarak pengeremannya (meter)? (s = v0² / (2 x a))", jawab: "16" },
-    { tanya: "Kereta dipercepat 5 m/s² dari kecepatan 10 m/s hingga mencapai 35 m/s. Berapa waktu yang diperlukan (sekon)? (t = (vt - v0) / a)", jawab: "5" }
+    { tanya: "Truk direm dari kecepatan 8 m/s hingga berhenti dengan perlambatan 2 m/s². Berapa jarak pengeremannya (meter)? (s = v0² / (2 x a))", jawab: "16" }
 ];
 const soalBabak2 = [
     { tanya: "Massa 40 kg, g=10. Berapa Gaya Berat (Newton)? (W = m x g)", jawab: "400" },
@@ -76,8 +78,7 @@ const soalBabak2 = [
     { tanya: "Dalam tarik tambang, regu A menarik ke kanan dengan gaya 50 N dan regu B ke kiri dengan gaya 20 N. Berapa besar resultan gayanya (Newton)? (R = F_kanan - F_kiri)", jawab: "30" },
     { tanya: "Sebuah balok menekan lantai dengan gaya normal 40 N. Jika koefisien gesek kinetisnya 0,5, berapa gaya geseknya (Newton)? (f = μ x N)", jawab: "20" },
     { tanya: "Benda bermassa 4 kg didorong dengan gaya 30 N, namun terhambat gaya gesek 10 N. Berapa percepatan benda (m/s²)? (a = (F - f) / m)", jawab: "5" },
-    { tanya: "Benda ditarik ke kanan oleh gaya 12 N dan 18 N, serta ditarik ke kiri oleh gaya 10 N. Berapa resultan gayanya (Newton)? (R = total gaya kanan - gaya kiri)", jawab: "20" },
-    { tanya: "Sebuah kotak memiliki berat 120 N di tempat yang percepatan gravitasinya 10 m/s². Berapa massa kotak tersebut (kg)? (m = w / g)", jawab: "12" }
+    { tanya: "Benda ditarik ke kanan oleh gaya 12 N dan 18 N, serta ditarik ke kiri oleh gaya 10 N. Berapa resultan gayanya (Newton)? (R = total gaya kanan - gaya kiri)", jawab: "20" }
 ];
 const soalBabak3 = [
     { tanya: "Batu 2 kg kecepatan 10 m/s. Energi Kinetiknya (Joule)? (EK = 1/2 x m x v²)", jawab: "100" },
@@ -393,10 +394,8 @@ class Babak3 extends Phaser.Scene {
         this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 150, y: 450, stepX: 100 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
-       // Orangutan peti (menggunakan Emoji)
-        this.orangutan = this.add.text(700, 230, '🦧', { fontSize: '50px' }).setVisible(false);
-        this.physics.add.existing(this.orangutan);
-        this.orangutan.body.setCollideWorldBounds(true);
+        // Orangutan (disembunyikan di dalam peti)
+        this.orangutan = this.physics.add.sprite(700, 250, 'pemburu').setTint(0xffa500).setVisible(false); 
         this.physics.add.collider(this.orangutan, this.platforms);
 
         this.peti = this.physics.add.image(700, 250, 'peti').setScale(1.5);
