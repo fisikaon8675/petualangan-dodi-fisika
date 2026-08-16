@@ -96,14 +96,24 @@ function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
     };
 }
 
+// Fungsi pembantu untuk menggambar pohon
+function gambarPohon(scene, x, y) {
+    let batang = scene.add.rectangle(x, y, 20, 100, 0x5C4033);
+    let daun = scene.add.circle(x, y - 50, 45, 0x228B22);
+}
+
 // ==========================================
-// KELAS BABAK 1 : TEPI HUTAN (Dengan TTS)
+// KELAS BABAK 1 : TEPI HUTAN 
 // ==========================================
 class Babak1 extends Phaser.Scene {
     constructor() { super('Babak1'); }
 
     preload() {
-        this.load.image('langit', 'https://labs.phaser.io/assets/skies/sky1.png');
+        // Load latar belakang yang berbeda
+        this.load.image('bg1', 'https://labs.phaser.io/assets/skies/sky1.png');
+        this.load.image('bg2', 'https://labs.phaser.io/assets/skies/sky4.png');
+        this.load.image('bg3', 'https://labs.phaser.io/assets/skies/sunset.png');
+        
         this.load.image('tanah', 'https://labs.phaser.io/assets/sprites/platform.png');
         this.load.spritesheet('dodi', 'https://labs.phaser.io/assets/sprites/dude.png', { frameWidth: 32, frameHeight: 48 });
         this.load.image('bintang', 'https://labs.phaser.io/assets/sprites/star.png');
@@ -114,8 +124,15 @@ class Babak1 extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 300, 'langit');
-        this.add.text(16, 16, 'Babak 1: Jawab 3 Tantangan untuk Buka Portal!', { fontSize: '18px', fill: '#000', fontStyle: 'bold' });
+        this.add.image(400, 300, 'bg1'); // Latar Siang
+        
+        // Hiasan Pohon di latar belakang
+        gambarPohon(this, 100, 480);
+        gambarPohon(this, 300, 480);
+        gambarPohon(this, 500, 480);
+        gambarPohon(this, 650, 480);
+
+        this.add.text(16, 16, 'Babak 1: Jawab 3 Tantangan di Hutan!', { fontSize: '20px', fill: '#000', fontStyle: 'bold', backgroundColor: '#fff' });
 
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, 'tanah').setScale(2).refreshBody();
@@ -210,35 +227,50 @@ class Babak1 extends Phaser.Scene {
 }
 
 // ==========================================
-// KELAS BABAK 2 : SUNGAI DERAS (Dengan Gembok)
+// KELAS BABAK 2 : SUNGAI DERAS
 // ==========================================
 class Babak2 extends Phaser.Scene {
     constructor() { super('Babak2'); }
 
     create() {
-        this.add.image(400, 300, 'langit').setTint(0x999999);
-        this.add.text(16, 16, 'Babak 2: Jawab 3 Soal untuk Membangun Jembatan!', { fontSize: '18px', fill: '#fff', fontStyle: 'bold' });
+        this.add.image(400, 300, 'bg2'); // Latar Awan Sore
+        
+        // Buat Air Sungai di bagian bawah
+        let airSungai = this.add.rectangle(400, 580, 800, 60, 0x1E90FF);
+        this.physics.add.existing(airSungai, true); // Menjadikannya objek statis
+        
+        // Hiasan Pohon di tepi kiri dan kanan
+        gambarPohon(this, 80, 480);
+        gambarPohon(this, 720, 480);
+
+        this.add.text(16, 16, 'Babak 2: Bangun Jembatan di Atas Sungai!', { fontSize: '20px', fill: '#000', fontStyle: 'bold', backgroundColor: '#fff' });
 
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(150, 568, 'tanah').refreshBody(); 
-        this.platforms.create(650, 568, 'tanah').refreshBody();
+        // Tanah awal dan akhir saja
+        this.platforms.create(100, 550, 'tanah').setScale(0.5, 1).refreshBody(); 
+        this.platforms.create(700, 550, 'tanah').setScale(0.5, 1).refreshBody();
 
-        this.dodi = this.physics.add.sprite(50, 450, 'dodi');
+        this.dodi = this.physics.add.sprite(50, 400, 'dodi');
         this.dodi.setBounce(0.2);
-        this.dodi.setCollideWorldBounds(false); 
+        this.dodi.setCollideWorldBounds(false); // Bisa jatuh
         this.physics.add.collider(this.dodi, this.platforms);
+
+        // Kematian jika jatuh ke sungai
+        this.physics.add.overlap(this.dodi, airSungai, () => {
+            this.scene.restart(); // Mengulang babak ini jika jatuh
+        });
 
         this.cursors = this.input.keyboard.createCursorKeys();
         
         this.soalTerjawab = 0;
-        this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 120, y: 450, stepX: 70 } });
+        this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 120, y: 400, stepX: 70 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
         this.portal = this.physics.add.image(750, 450, 'portal');
         this.physics.add.collider(this.portal, this.platforms);
         this.portal.setVisible(false);
         this.punyaToken = false;
-        this.gembokSedangAktif = false; // State untuk mencegah UI terbuka dobel
+        this.gembokSedangAktif = false; 
 
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
             let soalAcak = Phaser.Math.RND.pick(soalBabak2);
@@ -246,16 +278,17 @@ class Babak2 extends Phaser.Scene {
                 () => {
                     bintang.disableBody(true, true);
                     this.soalTerjawab++;
-                    let posisiX = 250 + (this.soalTerjawab * 65);
-                    let jembatanBaru = this.platforms.create(posisiX, 568, 'tanah').setScale(0.2, 1).refreshBody();
-                    jembatanBaru.setTint(0x8B4513); 
+                    // Membuat pijakan jembatan gantung (kayu kecil)
+                    let posisiX = 200 + (this.soalTerjawab * 125);
+                    let pijakan = this.platforms.create(posisiX, 550, 'tanah').setScale(0.2, 0.4).refreshBody();
+                    pijakan.setTint(0x8B4513); // Warna Coklat Kayu
+                    
                     if (this.soalTerjawab === 3) { this.punyaToken = true; this.portal.setVisible(true); }
                 },
                 () => { this.dodi.x -= 30; }
             );
         });
 
-        // LOGIKA GEMBOK 6 ANGKA
         this.physics.add.overlap(this.dodi, this.portal, () => {
             if (this.punyaToken && !this.gembokSedangAktif) {
                 this.gembokSedangAktif = true;
@@ -266,7 +299,6 @@ class Babak2 extends Phaser.Scene {
                 gembokUI.style.display = 'block';
                 document.getElementById('gembok-feedback').innerText = "";
 
-                // Tombol ENTER Sandi
                 document.getElementById('gembok-btn').onclick = () => {
                     let d1 = document.getElementById('digit1').value;
                     let d2 = document.getElementById('digit2').value;
@@ -274,27 +306,22 @@ class Babak2 extends Phaser.Scene {
                     let d4 = document.getElementById('digit4').value;
                     let d5 = document.getElementById('digit5').value;
                     let d6 = document.getElementById('digit6').value;
-
                     let sandi = d1 + d2 + d3 + d4 + d5 + d6;
 
                     if (sandi === "205035") {
                         document.getElementById('gembok-feedback').innerText = "SANDI BENAR! GEMBOK TERBUKA!";
                         document.getElementById('gembok-feedback').style.color = "lime";
-                        setTimeout(() => {
-                            gembokUI.style.display = 'none';
-                            this.scene.start('Babak3');
-                        }, 1500);
+                        setTimeout(() => { gembokUI.style.display = 'none'; this.scene.start('Babak3'); }, 1500);
                     } else {
                         document.getElementById('gembok-feedback').innerText = "SANDI SALAH! AKSES DITOLAK.";
                         document.getElementById('gembok-feedback').style.color = "red";
                     }
                 };
 
-                // Tombol BATAL (Agar Dodi tidak terjebak jika ingin hitung ulang)
                 document.getElementById('gembok-close').onclick = () => {
                     gembokUI.style.display = 'none';
                     this.gembokSedangAktif = false;
-                    this.dodi.x -= 40; // Terpental mundur
+                    this.dodi.x -= 40; 
                     this.physics.resume();
                 };
             }
@@ -305,24 +332,28 @@ class Babak2 extends Phaser.Scene {
         if (this.cursors.left.isDown) { this.dodi.setVelocityX(-160); this.dodi.anims.play('left', true); }
         else if (this.cursors.right.isDown) { this.dodi.setVelocityX(160); this.dodi.anims.play('right', true); }
         else { this.dodi.setVelocityX(0); this.dodi.anims.play('turn'); }
-        if (this.cursors.up.isDown && this.dodi.body.touching.down) { this.dodi.setVelocityY(-550); }
-        if (this.dodi.y > 600) { this.scene.restart(); }
+        if (this.cursors.up.isDown && this.dodi.body.touching.down) { this.dodi.setVelocityY(-500); }
+        if (this.dodi.y > 600) { this.scene.restart(); } // Pengaman ekstra jika jatuh
     }
 }
 
 // ==========================================
-// KELAS BABAK 3 : MARKAS PEMBURU 
+// KELAS BABAK 3 : MARKAS PEMBURU (SENJA)
 // ==========================================
 class Babak3 extends Phaser.Scene {
     constructor() { super('Babak3'); }
 
     create() {
-        this.add.image(400, 300, 'langit').setTint(0xffcccc);
-        this.add.text(16, 16, 'Babak 3: Jawab 3 Soal untuk Menembak Meriam!', { fontSize: '18px', fill: '#990000', fontStyle: 'bold' });
+        this.add.image(400, 300, 'bg3'); // Latar Senja/Sunset
+
+        this.add.text(16, 16, 'Babak 3: Lepaskan Meriam untuk Menyelamatkan Orangutan!', { fontSize: '20px', fill: '#000', fontStyle: 'bold', backgroundColor: '#fff' });
 
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, 'tanah').setScale(2).refreshBody(); 
         this.platforms.create(700, 350, 'tanah').setScale(0.5).refreshBody();
+
+        // Pohon gundul / markas
+        gambarPohon(this, 750, 270);
 
         this.dodi = this.physics.add.sprite(50, 450, 'dodi');
         this.dodi.setBounce(0.2);
@@ -335,6 +366,7 @@ class Babak3 extends Phaser.Scene {
         this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 150, y: 450, stepX: 100 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
+        // Orangutan (disembunyikan di dalam peti)
         this.orangutan = this.physics.add.sprite(700, 250, 'pemburu').setTint(0xffa500).setVisible(false); 
         this.physics.add.collider(this.orangutan, this.platforms);
 
@@ -353,11 +385,32 @@ class Babak3 extends Phaser.Scene {
                         batu.setBounce(0.5);
                         batu.setVelocity(400, -600); 
 
+                        // Ketika meriam menabrak peti
                         this.physics.add.collider(batu, this.peti, () => {
                             batu.disableBody(true, true); 
                             this.peti.disableBody(true, true); 
-                            this.orangutan.setVisible(true).setVelocityY(-300);
-                            setTimeout(() => { alert("TAMAT! Dodi berhasil menyelamatkan Orangutan! Kamu adalah Master Fisika!"); }, 500);
+                            
+                            // Tampilkan Orangutan
+                            this.orangutan.setVisible(true).setPosition(this.peti.x, this.peti.y - 30);
+                            
+                            // Animasi Orangutan melompat berayun ke Dodi
+                            this.tweens.add({
+                                targets: this.orangutan,
+                                x: this.dodi.x + 30, // Mendarat di samping Dodi
+                                y: this.dodi.y,
+                                duration: 1200,
+                                ease: 'Bounce.easeOut',
+                                onComplete: () => {
+                                    // Teks Kemenangan Besar
+                                    this.add.text(400, 200, 'SELAMAT!\nKAMU MENYELAMATKAN\nORANGUTAN!', { 
+                                        fontSize: '40px', fill: '#FFD700', fontStyle: 'bold', align: 'center', 
+                                        stroke: '#000', strokeThickness: 6 
+                                    }).setOrigin(0.5);
+                                    
+                                    this.physics.pause();
+                                    this.dodi.anims.play('turn');
+                                }
+                            });
                         });
                     }
                 },
