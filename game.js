@@ -150,7 +150,6 @@ class Babak1 extends Phaser.Scene {
         this.load.image('portal', 'https://labs.phaser.io/assets/sprites/diamond.png');
         this.load.image('peti', 'https://labs.phaser.io/assets/sprites/crate.png');
         this.load.image('batu', 'https://labs.phaser.io/assets/sprites/bomb.png');
-        this.load.image('orangutanAsli', 'https://cdn-icons-png.flaticon.com/512/3034/3034237.png');
     }
 
     create() {
@@ -396,8 +395,10 @@ class Babak3 extends Phaser.Scene {
         this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 150, y: 450, stepX: 100 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
-        // Orangutan (disembunyikan di dalam peti)
-        this.orangutan = this.physics.add.sprite(700, 250, 'orangutanAsli').setScale(0.15).setVisible(false);
+       // Orangutan peti (menggunakan Emoji)
+        this.orangutan = this.add.text(700, 230, '🦧', { fontSize: '50px' }).setVisible(false);
+        this.physics.add.existing(this.orangutan);
+        this.orangutan.body.setCollideWorldBounds(true);
         this.physics.add.collider(this.orangutan, this.platforms);
 
         this.peti = this.physics.add.image(700, 250, 'peti').setScale(1.5);
