@@ -1,13 +1,14 @@
+// Konfigurasi Dunia Game
 const config = {
     type: Phaser.AUTO,
-    width: 800,        // Lebar kanvas game
-    height: 600,       // Tinggi kanvas game
-    parent: 'game-container', // Div ID dari index.html tempat game akan dimuat
+    width: 800,
+    height: 600,
+    parent: 'game-container',
     physics: {
-        default: 'arcade', // Sistem fisika bawaan yang sangat cocok untuk game platformer
+        default: 'arcade',
         arcade: {
-            gravity: { y: 500 }, // Nilai gravitasi. Makin besar makin cepat jatuh. (Fisika Kinematika!)
-            debug: false // Nanti kita ubah 'true' untuk melihat kotak deteksi tabrakan
+            gravity: { y: 800 }, // Percepatan gravitasi (semakin besar, jatuh semakin cepat)
+            debug: false
         }
     },
     scene: {
@@ -17,32 +18,46 @@ const config = {
     }
 };
 
-// Menginisialisasi game Phaser dengan konfigurasi di atas
 const game = new Phaser.Game(config);
 
-// 1. PRELOAD: Tempat kita memasukkan memori gambar, karakter, dan suara
+// Variabel global agar bisa diakses di semua fungsi
+let dodi;
+let platforms;
+
+// 1. PRELOAD: Memuat memori gambar sebelum game dimulai
 function preload() {
-    console.log("Memuat aset...");
-    // Nanti kita akan memuat gambar Dodi dan tanah di sini
+    // Meminjam gambar sementara dari server Phaser agar Anda tidak perlu repot mengunggah gambar saat ini
+    this.load.image('langit', 'https://labs.phaser.io/assets/skies/sky1.png');
+    this.load.image('tanah', 'https://labs.phaser.io/assets/sprites/platform.png');
+    this.load.image('dodi', 'https://labs.phaser.io/assets/sprites/dude.png');
 }
 
-// 2. CREATE: Tempat kita membuat objek muncul di layar
+// 2. CREATE: Menempatkan objek ke dalam layar
 function create() {
-    // Mewarnai langit menjadi biru muda
-    this.cameras.main.setBackgroundColor('#87CEEB');
+    // A. Menambahkan background langit (koordinat x: 400, y: 300 adalah titik tengah layar)
+    this.add.image(400, 300, 'langit');
 
-    // Menampilkan teks sambutan (x, y, teks, style)
-    this.add.text(400, 300, 'Babak 1: Tepi Hutan\n(Menunggu Karakter Dodi...)', {
-        fontSize: '32px',
-        fill: '#ffffff',
-        fontStyle: 'bold',
-        align: 'center',
-        stroke: '#000000',
-        strokeThickness: 5
-    }).setOrigin(0.5); // Memastikan jangkar titik berada persis di tengah teks
+    // B. Membuat Tanah (Benda Statis / Hukum I Newton: akan tetap diam)
+    platforms = this.physics.add.staticGroup();
+    
+    // Meletakkan tanah di bawah layar dan memperbesar ukurannya 2 kali lipat (setScale)
+    platforms.create(400, 568, 'tanah').setScale(2).refreshBody();
+
+    // C. Memunculkan Dodi (Benda Dinamis / Akan ditarik oleh gravitasi bumi)
+    dodi = this.physics.add.sprite(100, 450, 'dodi');
+    
+    // Memberikan sifat elastis (Pantulan/Restitusi). Nilai 0.2 berarti memantul sedikit.
+    dodi.setBounce(0.2);
+    
+    // Membatasi Dodi agar tidak jatuh menembus batas kanvas game
+    dodi.setCollideWorldBounds(true);
+
+    // D. Hukum Aksi-Reaksi (Kolisi)
+    // Memerintahkan mesin fisika agar Dodi berpijak pada tanah (tidak tembus)
+    this.physics.add.collider(dodi, platforms);
 }
 
-// 3. UPDATE: Tempat logika utama terjadi berulang-ulang (sekitar 60 frame per detik)
+// 3. UPDATE: Logika berulang (dikosongkan dulu untuk langkah 3 nanti)
 function update() {
-    // Logika kontrol keyboard dan interaksi akan kita tulis di sini
+    // Menunggu Langkah 3...
 }
