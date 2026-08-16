@@ -1,29 +1,46 @@
 // ==========================================
-// DATA BANK SOAL FISIKA
+// INJEKSI UI TEKA-TEKI SILANG (Otomatis ditambahkan ke HTML)
+// ==========================================
+const ttsHTML = `
+<div id="tts-container" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff8dc; padding:20px; border:5px solid #8b4513; border-radius:15px; text-align:center; z-index:100; width:400px; box-shadow: 0px 0px 20px rgba(0,0,0,0.5);">
+    <h2 style="margin-top:0; color:#8b4513;">📝 TTS Portal Rahasia</h2>
+    <p style="font-size:14px; text-align:left; margin-bottom: 5px;"><b>1. Mendatar (5 Huruf):</b> Berpindahnya benda dari posisi asalnya.</p>
+    <input type="text" id="tts-mendatar" placeholder="Ketik jawaban..." maxlength="5" style="width:90%; padding:10px; margin-bottom:15px; text-transform:uppercase; text-align:center; font-weight:bold; letter-spacing: 5px;">
+    
+    <p style="font-size:14px; text-align:left; margin-bottom: 5px;"><b>2. Menurun (4 Huruf):</b> Tarikan atau dorongan.</p>
+    <input type="text" id="tts-menurun" placeholder="Ketik jawaban..." maxlength="4" style="width:90%; padding:10px; margin-bottom:15px; text-transform:uppercase; text-align:center; font-weight:bold; letter-spacing: 5px;">
+    
+    <br>
+    <button id="tts-btn" style="padding:10px 20px; background:#4CAF50; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size:16px;">Buka Portal</button>
+    <p id="tts-feedback" style="font-weight:bold; margin-top:10px;"></p>
+</div>
+`;
+if (!document.getElementById('tts-container')) {
+    document.body.insertAdjacentHTML('beforeend', ttsHTML);
+}
+
+// ==========================================
+// DATA BANK SOAL FISIKA (BINTANG)
 // ==========================================
 const soalBabak1 = [
-    { tanya: "Jarak jembatan 10 m. Dodi melayang selama 2 s, berapa kecepatan awalnya (m/s)? (v = s/t)", jawab: "5" },
-    { tanya: "Dodi berlari dengan kecepatan 4 m/s selama 3 s. Berapa jarak yang ditempuh (meter)? (s = v x t)", jawab: "12" },
-    { tanya: "Dari keadaan diam, percepatan Dodi 2 m/s². Kecepatannya setelah 4 s adalah (m/s)? (v = a x t)", jawab: "8" }
+    { tanya: "Jarak jembatan 10 m. Dodi melayang 2 s, berapa kecepatan awalnya (m/s)? (v = s/t)", jawab: "5" },
+    { tanya: "Dodi berlari 4 m/s selama 3 s. Berapa jarak tempuhnya (meter)? (s = v x t)", jawab: "12" },
+    { tanya: "Dari keadaan diam, percepatan 2 m/s². Kecepatannya setelah 4 s adalah (m/s)? (v = a x t)", jawab: "8" }
 ];
-
 const soalBabak2 = [
-    { tanya: "Massa 40 kg, gravitasi 10 m/s². Berapa Gaya Berat (Newton)? (W = m x g)", jawab: "400" },
-    { tanya: "Dodi mendorong batu 10 kg dengan gaya 50 N. Berapa percepatan batu (m/s²)? (a = F/m)", jawab: "5" },
-    { tanya: "Gaya tarik 20 N ke kanan, gaya gesek 5 N ke kiri. Berapa Resultan Gayanya (N)?", jawab: "15" }
+    { tanya: "Massa 40 kg, g=10. Berapa Gaya Berat (Newton)? (W = m x g)", jawab: "400" },
+    { tanya: "Dorong batu 10 kg gaya 50 N. Berapa percepatannya (m/s²)? (a = F/m)", jawab: "5" },
+    { tanya: "Tarik 20 N ke kanan, gesek 5 N ke kiri. Resultan (N)?", jawab: "15" }
 ];
-
 const soalBabak3 = [
-    { tanya: "Batu 2 kg dilontarkan dengan kecepatan 10 m/s. Berapa Energi Kinetiknya (Joule)? (EK = 1/2 x m x v²)", jawab: "100" },
-    { tanya: "Batu 4 kg diangkat setinggi 5 meter (g=10). Berapa Energi Potensialnya (Joule)? (EP = m x g x h)", jawab: "200" },
-    { tanya: "Dodi mendorong meriam 5 meter dengan gaya 10 N. Berapa Usahanya (Joule)? (W = F x s)", jawab: "50" }
+    { tanya: "Batu 2 kg kecepatan 10 m/s. Energi Kinetiknya (Joule)? (EK = 1/2 x m x v²)", jawab: "100" },
+    { tanya: "Angkat batu 4 kg setinggi 5 meter. Energi Potensialnya (Joule)? (EP = m.g.h)", jawab: "200" },
+    { tanya: "Dorong meriam 5 m dengan gaya 10 N. Usahanya (Joule)? (W = F x s)", jawab: "50" }
 ];
 
-// FUNGSI BANTUAN UNTUK MENAMPILKAN UI SOAL
 function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
     scene.physics.pause();
     scene.dodi.anims.play('turn');
-    
     let ui = document.getElementById('ui-container');
     let btnSubmit = document.getElementById('submit-btn');
     let input = document.getElementById('answer-input');
@@ -33,33 +50,24 @@ function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
     document.getElementById('question-desc').innerText = soalAcak.tanya;
     input.value = "";
     feedback.innerText = "";
-    btnSubmit.disabled = false; // Aktifkan tombol
+    btnSubmit.disabled = false;
 
     btnSubmit.onclick = () => {
-        btnSubmit.disabled = true; // Matikan tombol sementara agar tidak di-klik dobel
+        btnSubmit.disabled = true; 
         if (input.value == soalAcak.jawab) {
             feedback.innerText = "BENAR!";
             feedback.style.color = "green";
-            setTimeout(() => {
-                ui.classList.add('hidden');
-                callbackBenar();
-                scene.physics.resume();
-            }, 1500);
+            setTimeout(() => { ui.classList.add('hidden'); callbackBenar(); scene.physics.resume(); }, 1500);
         } else {
             feedback.innerText = "SALAH! Coba hitung lagi.";
             feedback.style.color = "red";
-            setTimeout(() => {
-                ui.classList.add('hidden');
-                callbackSalah();
-                scene.physics.resume();
-            }, 1500);
+            setTimeout(() => { ui.classList.add('hidden'); callbackSalah(); scene.physics.resume(); }, 1500);
         }
     };
 }
 
-
 // ==========================================
-// KELAS BABAK 1 : TEPI HUTAN (KINEMATIKA)
+// KELAS BABAK 1 : TEPI HUTAN
 // ==========================================
 class Babak1 extends Phaser.Scene {
     constructor() { super('Babak1'); }
@@ -95,13 +103,8 @@ class Babak1 extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         
-        // MEMBUAT 3 BINTANG TANTANGAN
         this.soalTerjawab = 0;
-        this.bintangGroup = this.physics.add.group({
-            key: 'bintang',
-            repeat: 2, // Total 3 bintang
-            setXY: { x: 250, y: 450, stepX: 150 } // Posisi x: 250, 400, 550
-        });
+        this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 250, y: 450, stepX: 150 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
         this.pemburu = this.physics.add.sprite(700, 450, 'pemburu').setScale(1.5);
@@ -111,6 +114,7 @@ class Babak1 extends Phaser.Scene {
         this.physics.add.collider(this.portal, this.platforms);
         this.portal.setVisible(false);
         this.punyaToken = false;
+        this.ttsSedangAktif = false;
 
         this.physics.add.collider(this.dodi, this.pemburu, () => {
             this.physics.pause();
@@ -118,34 +122,57 @@ class Babak1 extends Phaser.Scene {
             setTimeout(() => { alert("Tertangkap!"); this.scene.restart(); }, 500);
         });
 
-        this.physics.add.overlap(this.dodi, this.portal, () => {
-            if (this.punyaToken) {
-                this.physics.pause();
-                alert("Babak 1 Selesai! Lanjut ke Sungai Deras...");
-                this.scene.start('Babak2');
-            }
-        });
-
-        // LOGIKA KETIKA MENYENTUH BINTANG
+        // TANTANGAN BINTANG
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
             let soalAcak = Phaser.Math.RND.pick(soalBabak1);
-            
             tampilkanSoal(this, soalAcak, 
-                // Jika Benar
                 () => {
                     bintang.disableBody(true, true);
                     this.soalTerjawab++;
                     if (this.soalTerjawab === 3) {
                         this.punyaToken = true;
-                        this.pemburu.disableBody(true, true); // Pemburu kabur
-                        this.portal.setVisible(true); // Portal terbuka
+                        this.pemburu.disableBody(true, true); 
+                        this.portal.setVisible(true); 
                     }
                 },
-                // Jika Salah
-                () => {
-                    this.dodi.x -= 40; // Dodi terpental mundur
-                }
+                () => { this.dodi.x -= 40; }
             );
+        });
+
+        // LOGIKA PORTAL & TEKA-TEKI SILANG
+        this.physics.add.overlap(this.dodi, this.portal, () => {
+            if (this.punyaToken && !this.ttsSedangAktif) {
+                this.ttsSedangAktif = true;
+                this.physics.pause();
+                this.dodi.anims.play('turn');
+
+                let ttsUI = document.getElementById('tts-container');
+                ttsUI.style.display = 'block';
+                
+                // Reset form
+                document.getElementById('tts-mendatar').value = "";
+                document.getElementById('tts-menurun').value = "";
+                document.getElementById('tts-feedback').innerText = "";
+                
+                document.getElementById('tts-btn').onclick = () => {
+                    let mendatar = document.getElementById('tts-mendatar').value.toUpperCase().trim();
+                    let menurun = document.getElementById('tts-menurun').value.toUpperCase().trim();
+                    let feedback = document.getElementById('tts-feedback');
+
+                    // JAWABAN TTS: GERAK & GAYA
+                    if (mendatar === "GERAK" && menurun === "GAYA") {
+                        feedback.innerText = "KODE PORTAL DITERIMA! MELUNCUR...";
+                        feedback.style.color = "green";
+                        setTimeout(() => {
+                            ttsUI.style.display = 'none';
+                            this.scene.start('Babak2');
+                        }, 1500);
+                    } else {
+                        feedback.innerText = "Jawaban Salah! Coba baca soalnya lagi.";
+                        feedback.style.color = "red";
+                    }
+                };
+            }
         });
     }
 
@@ -158,7 +185,7 @@ class Babak1 extends Phaser.Scene {
 }
 
 // ==========================================
-// KELAS BABAK 2 : SUNGAI DERAS (HUKUM NEWTON)
+// KELAS BABAK 2 : SUNGAI DERAS 
 // ==========================================
 class Babak2 extends Phaser.Scene {
     constructor() { super('Babak2'); }
@@ -178,13 +205,8 @@ class Babak2 extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         
-        // MEMBUAT 3 BINTANG DI TEBING KIRI
         this.soalTerjawab = 0;
-        this.bintangGroup = this.physics.add.group({
-            key: 'bintang',
-            repeat: 2, 
-            setXY: { x: 120, y: 450, stepX: 70 } // Kumpul di tebing kiri
-        });
+        this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 120, y: 450, stepX: 70 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
         this.portal = this.physics.add.image(750, 450, 'portal');
@@ -202,27 +224,16 @@ class Babak2 extends Phaser.Scene {
 
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
             let soalAcak = Phaser.Math.RND.pick(soalBabak2);
-            
             tampilkanSoal(this, soalAcak, 
-                // Jika Benar
                 () => {
                     bintang.disableBody(true, true);
                     this.soalTerjawab++;
-                    
-                    // MEMBANGUN JEMBATAN BERTAHAP
                     let posisiX = 250 + (this.soalTerjawab * 65);
                     let jembatanBaru = this.platforms.create(posisiX, 568, 'tanah').setScale(0.2, 1).refreshBody();
-                    jembatanBaru.setTint(0x8B4513); // Warna coklat kayu
-                    
-                    if (this.soalTerjawab === 3) {
-                        this.punyaToken = true;
-                        this.portal.setVisible(true);
-                    }
+                    jembatanBaru.setTint(0x8B4513); 
+                    if (this.soalTerjawab === 3) { this.punyaToken = true; this.portal.setVisible(true); }
                 },
-                // Jika Salah
-                () => {
-                    this.dodi.x -= 30; // Terpental mundur
-                }
+                () => { this.dodi.x -= 30; }
             );
         });
     }
@@ -232,12 +243,12 @@ class Babak2 extends Phaser.Scene {
         else if (this.cursors.right.isDown) { this.dodi.setVelocityX(160); this.dodi.anims.play('right', true); }
         else { this.dodi.setVelocityX(0); this.dodi.anims.play('turn'); }
         if (this.cursors.up.isDown && this.dodi.body.touching.down) { this.dodi.setVelocityY(-550); }
-        if (this.dodi.y > 600) { this.scene.restart(); } // Jatuh = ulang level
+        if (this.dodi.y > 600) { this.scene.restart(); }
     }
 }
 
 // ==========================================
-// KELAS BABAK 3 : MARKAS PEMBURU (ENERGI & PARABOLA)
+// KELAS BABAK 3 : MARKAS PEMBURU 
 // ==========================================
 class Babak3 extends Phaser.Scene {
     constructor() { super('Babak3'); }
@@ -257,18 +268,11 @@ class Babak3 extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         
-        // MEMBUAT 3 BINTANG PENGISI DAYA PELONTAR
         this.soalTerjawab = 0;
-        this.bintangGroup = this.physics.add.group({
-            key: 'bintang',
-            repeat: 2, 
-            setXY: { x: 150, y: 450, stepX: 100 }
-        });
+        this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 150, y: 450, stepX: 100 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
-        this.orangutan = this.physics.add.sprite(700, 250, 'pemburu');
-        this.orangutan.setTint(0xffa500); 
-        this.orangutan.setVisible(false); 
+        this.orangutan = this.physics.add.sprite(700, 250, 'pemburu').setTint(0xffa500).setVisible(false); 
         this.physics.add.collider(this.orangutan, this.platforms);
 
         this.peti = this.physics.add.image(700, 250, 'peti').setScale(1.5);
@@ -276,39 +280,25 @@ class Babak3 extends Phaser.Scene {
 
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
             let soalAcak = Phaser.Math.RND.pick(soalBabak3);
-            
             tampilkanSoal(this, soalAcak, 
-                // Jika Benar
                 () => {
                     bintang.disableBody(true, true);
                     this.soalTerjawab++;
-                    
                     if (this.soalTerjawab === 3) {
-                        // BINTANG KETIGA MENGAKTIFKAN MERIAM!
                         let batu = this.physics.add.sprite(350, 450, 'batu').setScale(1.5);
                         this.physics.add.collider(batu, this.platforms);
                         batu.setBounce(0.5);
-                        
-                        // Menembak Parabola
                         batu.setVelocity(400, -600); 
 
                         this.physics.add.collider(batu, this.peti, () => {
                             batu.disableBody(true, true); 
                             this.peti.disableBody(true, true); 
-                            
-                            this.orangutan.setVisible(true);
-                            this.orangutan.setVelocityY(-300);
-                            
-                            setTimeout(() => {
-                                alert("TAMAT! Dodi berhasil menyelamatkan Orangutan! Kamu adalah Master Fisika!");
-                            }, 500);
+                            this.orangutan.setVisible(true).setVelocityY(-300);
+                            setTimeout(() => { alert("TAMAT! Dodi berhasil menyelamatkan Orangutan! Kamu adalah Master Fisika!"); }, 500);
                         });
                     }
                 },
-                // Jika Salah
-                () => {
-                    this.dodi.x -= 40; 
-                }
+                () => { this.dodi.x -= 40; }
             );
         });
     }
@@ -322,15 +312,8 @@ class Babak3 extends Phaser.Scene {
 }
 
 const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'game-container',
-    physics: {
-        default: 'arcade',
-        arcade: { gravity: { y: 800 }, debug: false }
-    },
+    type: Phaser.AUTO, width: 800, height: 600, parent: 'game-container',
+    physics: { default: 'arcade', arcade: { gravity: { y: 800 }, debug: false } },
     scene: [Babak1, Babak2, Babak3] 
 };
-
 const game = new Phaser.Game(config);
