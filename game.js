@@ -53,14 +53,32 @@ if (!document.getElementById('gembok-container')) document.body.insertAdjacentHT
 // DATA BANK SOAL FISIKA (BINTANG)
 // ==========================================
 const soalBabak1 = [
-    { tanya: "Jarak jembatan 10 m. Dodi melayang 2 s, berapa kecepatan awalnya (m/s)? (v = s/t)", jawab: "5" },
-    { tanya: "Dodi berlari 4 m/s selama 3 s. Berapa jarak tempuhnya (meter)? (s = v x t)", jawab: "12" },
-    { tanya: "Dari keadaan diam, percepatan 2 m/s². Kecepatannya setelah 4 s adalah (m/s)? (v = a x t)", jawab: "8" }
+    { tanya: "Jarak tempuh sebuah mobil adalah 20 meter dan ditempuh dalam waktu 4 sekon. Berapa kecepatannya (m/s)? (v = s / t)", jawab: "5" },
+    { tanya: "Sebuah sepeda bergerak dengan kecepatan konstan 15 m/s selama 3 sekon. Berapa jarak yang ditempuhnya (meter)? (s = v x t)", jawab: "45" },
+    { tanya: "Benda diam mengalami percepatan konstan 3 m/s². Berapa kecepatannya setelah 5 sekon (m/s)? (v = a x t)", jawab: "15" },
+    { tanya: "Seorang atlet berlari dengan kecepatan 6 m/s untuk menempuh lintasan sejauh 42 meter. Berapa waktu yang dibutuhkan (sekon)? (t = s / v)", jawab: "7" },
+    { tanya: "Mobil memiliki kecepatan awal 4 m/s dan dipercepat 2 m/s². Kecepatannya setelah 3 sekon adalah (m/s)? (vt = v0 + a x t)", jawab: "10" },
+    { tanya: "Sepeda motor menambah kecepatan dari 10 m/s menjadi 30 m/s dalam waktu 5 sekon. Berapa percepatannya (m/s²)? (a = (vt - v0) / t)", jawab: "4" },
+    { tanya: "Dari keadaan diam, mobil balap dipercepat 4 m/s² selama 3 sekon. Berapa jarak yang ditempuhnya (meter)? (s = 1/2 x a x t²)", jawab: "18" },
+    { tanya: "Buah kelapa jatuh bebas dari pohon dan mencapai tanah dalam 2 sekon (g = 10 m/s²). Berapa ketinggian jatuhnya (meter)? (h = 1/2 x g x t²)", jawab: "20" },
+    { tanya: "Truk direm dari kecepatan 8 m/s hingga berhenti dengan perlambatan 2 m/s². Berapa jarak pengeremannya (meter)? (s = v0² / (2 x a))", jawab: "16" },
+    { tanya: "Kereta dipercepat 5 m/s² dari kecepatan 10 m/s hingga mencapai 35 m/s. Berapa waktu yang diperlukan (sekon)? (t = (vt - v0) / a)", jawab: "5" }
+]
 ];
 const soalBabak2 = [
     { tanya: "Massa 40 kg, g=10. Berapa Gaya Berat (Newton)? (W = m x g)", jawab: "400" },
     { tanya: "Dorong batu 10 kg gaya 50 N. Berapa percepatannya (m/s²)? (a = F/m)", jawab: "5" },
     { tanya: "Tarik 20 N ke kanan, gesek 5 N ke kiri. Resultan (N)?", jawab: "15" }
+    { tanya: "Benda bermassa 5 kg diberi percepatan 4 m/s². Berapa gaya yang bekerja pada benda tersebut (Newton)? (F = m x a)", jawab: "20" },
+    { tanya: "Gaya sebesar 30 N bekerja pada benda bermassa 6 kg. Berapa percepatan yang dialami benda (m/s²)? (a = F / m)", jawab: "5" },
+    { tanya: "Sebuah lemari ditarik dengan gaya 50 N sehingga mengalami percepatan 10 m/s². Berapa massa lemari tersebut (kg)? (m = F / a)", jawab: "5" },
+    { tanya: "Sebuah batu bermassa 8 kg berada di bumi (g = 10 m/s²). Berapa berat batu tersebut (Newton)? (w = m x g)", jawab: "80" },
+    { tanya: "Dua orang mendorong mobil mogok ke arah yang sama. Orang pertama memberi gaya 15 N dan orang kedua 25 N. Berapa resultan gayanya (Newton)? (R = F1 + F2)", jawab: "40" },
+    { tanya: "Dalam tarik tambang, regu A menarik ke kanan dengan gaya 50 N dan regu B ke kiri dengan gaya 20 N. Berapa besar resultan gayanya (Newton)? (R = F_kanan - F_kiri)", jawab: "30" },
+    { tanya: "Sebuah balok menekan lantai dengan gaya normal 40 N. Jika koefisien gesek kinetisnya 0,5, berapa gaya geseknya (Newton)? (f = μ x N)", jawab: "20" },
+    { tanya: "Benda bermassa 4 kg didorong dengan gaya 30 N, namun terhambat gaya gesek 10 N. Berapa percepatan benda (m/s²)? (a = (F - f) / m)", jawab: "5" },
+    { tanya: "Benda ditarik ke kanan oleh gaya 12 N dan 18 N, serta ditarik ke kiri oleh gaya 10 N. Berapa resultan gayanya (Newton)? (R = total gaya kanan - gaya kiri)", jawab: "20" },
+    { tanya: "Sebuah kotak memiliki berat 120 N di tempat yang percepatan gravitasinya 10 m/s². Berapa massa kotak tersebut (kg)? (m = w / g)", jawab: "12" }
 ];
 const soalBabak3 = [
     { tanya: "Batu 2 kg kecepatan 10 m/s. Energi Kinetiknya (Joule)? (EK = 1/2 x m x v²)", jawab: "100" },
@@ -121,6 +139,7 @@ class Babak1 extends Phaser.Scene {
         this.load.image('portal', 'https://labs.phaser.io/assets/sprites/diamond.png');
         this.load.image('peti', 'https://labs.phaser.io/assets/sprites/crate.png');
         this.load.image('batu', 'https://labs.phaser.io/assets/sprites/bomb.png');
+        this.load.image('orangutanAsli', 'https://cdn-icons-png.flaticon.com/512/3034/3034237.png');
     }
 
     create() {
@@ -367,7 +386,7 @@ class Babak3 extends Phaser.Scene {
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
         // Orangutan (disembunyikan di dalam peti)
-        this.orangutan = this.physics.add.sprite(700, 250, 'pemburu').setTint(0xffa500).setVisible(false); 
+        this.orangutan = this.physics.add.sprite(700, 250, 'orangutanAsli').setScale(0.15).setVisible(false);
         this.physics.add.collider(this.orangutan, this.platforms);
 
         this.peti = this.physics.add.image(700, 250, 'peti').setScale(1.5);
