@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Dodi & Misteri Rimba Fisika</title>
+    
+    <!-- Menghubungkan file CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Memuat Engine Phaser 3 dari CDN (Wajib butuh internet saat play) -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+</head>
+<body>
+    
+    <!-- Wadah tempat Phaser akan me-render gamenya -->
+    <div id="game-container"></div>
+
+    <!-- Sistem Pop-up Soal Fisika (Awalnya disembunyikan pakai class "hidden") -->
+    <div id="ui-container" class="hidden">
+        <div id="question-box">
+            <h2 id="question-text">Soal Fisika</h2>
+            <p id="question-desc">Pertanyaan akan muncul di sini.</p>
+            <input type="number" id="answer-input" placeholder="Masukkan angka...">
+            <button id="submit-btn">Jawab</button>
+            <p id="feedback-text"></p>
+        </div>
+    </div>
+
+    <!-- Menghubungkan logika game utama kita -->
+    <script src="game.js"></script>
+
+</body>
+</html>
