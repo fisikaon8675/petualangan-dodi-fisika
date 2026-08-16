@@ -83,7 +83,18 @@ const soalBabak2 = [
 const soalBabak3 = [
     { tanya: "Batu 2 kg kecepatan 10 m/s. Energi Kinetiknya (Joule)? (EK = 1/2 x m x v²)", jawab: "100" },
     { tanya: "Angkat batu 4 kg setinggi 5 meter. Energi Potensialnya (Joule)? (EP = m.g.h)", jawab: "200" },
-    { tanya: "Dorong meriam 5 m dengan gaya 10 N. Usahanya (Joule)? (W = F x s)", jawab: "50" }
+    { tanya: "Dorong meriam 5 m dengan gaya 10 N. Usahanya (Joule)? (W = F x s)", jawab: "50" },
+    { tanya: "Sebuah balok ditarik dengan gaya 20 N sehingga berpindah sejauh 5 meter. Berapa usaha yang dilakukan (Joule)? (W = F x s)", jawab: "100" },
+    { tanya: "Sebuah kelapa bermassa 4 kg berada pada ketinggian 5 meter dari tanah (g = 10 m/s²). Berapa energi potensialnya (Joule)? (EP = m x g x h)", jawab: "200" },
+    { tanya: "Benda bermassa 2 kg bergerak dengan kecepatan 6 m/s. Berapa energi kinetiknya (Joule)? (EK = 1/2 x m x v²)", jawab: "36" },
+    { tanya: "Sebuah mesin melakukan usaha sebesar 120 Joule dalam waktu 4 sekon. Berapa daya mesin tersebut (Watt)? (P = W / t)", jawab: "30" },
+    { tanya: "Usaha sebesar 150 Joule digunakan untuk mendorong meja dengan gaya 30 N. Berapa jarak perpindahannya (meter)? (s = W / F)", jawab: "5" },
+    { tanya: "Untuk memindahkan kotak sejauh 4 meter diperlukan usaha sebesar 80 Joule. Berapa gaya yang diberikan (Newton)? (F = W / s)", jawab: "20" },
+    { tanya: "Benda bermassa 3 kg diangkat dari ketinggian 2 m ke 6 m (g = 10 m/s²). Berapa usaha yang dilakukan (Joule)? (W = m x g x (h2 - h1))", jawab: "120" },
+    { tanya: "Mobil mainan bermassa 4 kg dipercepat dari kecepatan 2 m/s menjadi 4 m/s. Berapa usaha yang dilakukan (Joule)? (W = 1/2 x m x (vt² - v0²))", jawab: "24" },
+    { tanya: "Benda bermassa 6 kg memiliki energi potensial 300 Joule (g = 10 m/s²). Berapa ketinggian benda tersebut (meter)? (h = EP / (m x g))", jawab: "5" },
+    { tanya: "Benda bermassa 2 kg memiliki energi kinetik 64 Joule. Berapa kecepatan benda tersebut (m/s)? (v = √( (2 x EK) / m ))", jawab: "8" }
+]
 ];
 
 function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
