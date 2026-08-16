@@ -1,5 +1,5 @@
 // ==========================================
-// INJEKSI UI TEKA-TEKI SILANG (Otomatis ditambahkan ke HTML)
+// 1. INJEKSI UI TEKA-TEKI SILANG (BABAK 1)
 // ==========================================
 const ttsHTML = `
 <div id="tts-container" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff8dc; padding:20px; border:5px solid #8b4513; border-radius:15px; text-align:center; z-index:100; width:400px; box-shadow: 0px 0px 20px rgba(0,0,0,0.5);">
@@ -15,9 +15,39 @@ const ttsHTML = `
     <p id="tts-feedback" style="font-weight:bold; margin-top:10px;"></p>
 </div>
 `;
-if (!document.getElementById('tts-container')) {
-    document.body.insertAdjacentHTML('beforeend', ttsHTML);
-}
+if (!document.getElementById('tts-container')) document.body.insertAdjacentHTML('beforeend', ttsHTML);
+
+
+// ==========================================
+// 2. INJEKSI UI GEMBOK DIGITAL (BABAK 2)
+// ==========================================
+const gembokHTML = `
+<div id="gembok-container" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#2c3e50; color:white; padding:20px; border:5px solid #f1c40f; border-radius:15px; text-align:center; z-index:100; width:450px; box-shadow: 0px 0px 30px rgba(0,0,0,0.8);">
+    <h2 style="margin-top:0; color:#f1c40f;">🔒 GEMBOK PORTAL BABAK 3</h2>
+    <p style="font-size:13px; text-align:left; background:#34495e; padding:10px; border-radius:5px;">
+        <b>Scroll angka untuk menjawab 3 Soal Gaya (Sandi 6 Digit):</b><br><br>
+        1. Massa 10 kg, percepatan 2 m/s². (F = ?)<br>
+        2. Dorongan 70 N, Gaya Gesek 20 N. (Resultan = ?)<br>
+        3. Tarik ke kanan 50 N, ke kiri 15 N. (Resultan = ?)
+    </p>
+    
+    <div style="display:flex; justify-content:center; gap:5px; margin-bottom:20px; margin-top:15px;">
+        <input type="number" id="digit1" min="0" max="9" value="0" style="width:45px; height:55px; font-size:28px; text-align:center; border-radius:5px; border:2px solid #7f8c8d;">
+        <input type="number" id="digit2" min="0" max="9" value="0" style="width:45px; height:55px; font-size:28px; text-align:center; border-radius:5px; border:2px solid #7f8c8d;">
+        <span style="font-size:30px; margin: 0 5px;">-</span>
+        <input type="number" id="digit3" min="0" max="9" value="0" style="width:45px; height:55px; font-size:28px; text-align:center; border-radius:5px; border:2px solid #7f8c8d;">
+        <input type="number" id="digit4" min="0" max="9" value="0" style="width:45px; height:55px; font-size:28px; text-align:center; border-radius:5px; border:2px solid #7f8c8d;">
+        <span style="font-size:30px; margin: 0 5px;">-</span>
+        <input type="number" id="digit5" min="0" max="9" value="0" style="width:45px; height:55px; font-size:28px; text-align:center; border-radius:5px; border:2px solid #7f8c8d;">
+        <input type="number" id="digit6" min="0" max="9" value="0" style="width:45px; height:55px; font-size:28px; text-align:center; border-radius:5px; border:2px solid #7f8c8d;">
+    </div>
+    
+    <button id="gembok-btn" style="padding:10px 20px; background:#f1c40f; color:black; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size:16px;">🔓 ENTER SANDI</button>
+    <button id="gembok-close" style="padding:10px 20px; background:#e74c3c; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; font-size:16px; margin-left:10px;">BATAL</button>
+    <p id="gembok-feedback" style="font-weight:bold; margin-top:10px;"></p>
+</div>
+`;
+if (!document.getElementById('gembok-container')) document.body.insertAdjacentHTML('beforeend', gembokHTML);
 
 // ==========================================
 // DATA BANK SOAL FISIKA (BINTANG)
@@ -67,7 +97,7 @@ function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
 }
 
 // ==========================================
-// KELAS BABAK 1 : TEPI HUTAN
+// KELAS BABAK 1 : TEPI HUTAN (Dengan TTS)
 // ==========================================
 class Babak1 extends Phaser.Scene {
     constructor() { super('Babak1'); }
@@ -122,7 +152,6 @@ class Babak1 extends Phaser.Scene {
             setTimeout(() => { alert("Tertangkap!"); this.scene.restart(); }, 500);
         });
 
-        // TANTANGAN BINTANG
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
             let soalAcak = Phaser.Math.RND.pick(soalBabak1);
             tampilkanSoal(this, soalAcak, 
@@ -139,7 +168,6 @@ class Babak1 extends Phaser.Scene {
             );
         });
 
-        // LOGIKA PORTAL & TEKA-TEKI SILANG
         this.physics.add.overlap(this.dodi, this.portal, () => {
             if (this.punyaToken && !this.ttsSedangAktif) {
                 this.ttsSedangAktif = true;
@@ -148,8 +176,6 @@ class Babak1 extends Phaser.Scene {
 
                 let ttsUI = document.getElementById('tts-container');
                 ttsUI.style.display = 'block';
-                
-                // Reset form
                 document.getElementById('tts-mendatar').value = "";
                 document.getElementById('tts-menurun').value = "";
                 document.getElementById('tts-feedback').innerText = "";
@@ -159,7 +185,6 @@ class Babak1 extends Phaser.Scene {
                     let menurun = document.getElementById('tts-menurun').value.toUpperCase().trim();
                     let feedback = document.getElementById('tts-feedback');
 
-                    // JAWABAN TTS: GERAK & GAYA
                     if (mendatar === "GERAK" && menurun === "GAYA") {
                         feedback.innerText = "KODE PORTAL DITERIMA! MELUNCUR...";
                         feedback.style.color = "green";
@@ -185,7 +210,7 @@ class Babak1 extends Phaser.Scene {
 }
 
 // ==========================================
-// KELAS BABAK 2 : SUNGAI DERAS 
+// KELAS BABAK 2 : SUNGAI DERAS (Dengan Gembok)
 // ==========================================
 class Babak2 extends Phaser.Scene {
     constructor() { super('Babak2'); }
@@ -213,14 +238,7 @@ class Babak2 extends Phaser.Scene {
         this.physics.add.collider(this.portal, this.platforms);
         this.portal.setVisible(false);
         this.punyaToken = false;
-
-        this.physics.add.overlap(this.dodi, this.portal, () => {
-            if (this.punyaToken) {
-                this.physics.pause();
-                alert("Babak 2 Selesai! Bersiap menuju Markas Boss!");
-                this.scene.start('Babak3'); 
-            }
-        });
+        this.gembokSedangAktif = false; // State untuk mencegah UI terbuka dobel
 
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
             let soalAcak = Phaser.Math.RND.pick(soalBabak2);
@@ -235,6 +253,51 @@ class Babak2 extends Phaser.Scene {
                 },
                 () => { this.dodi.x -= 30; }
             );
+        });
+
+        // LOGIKA GEMBOK 6 ANGKA
+        this.physics.add.overlap(this.dodi, this.portal, () => {
+            if (this.punyaToken && !this.gembokSedangAktif) {
+                this.gembokSedangAktif = true;
+                this.physics.pause();
+                this.dodi.anims.play('turn');
+
+                let gembokUI = document.getElementById('gembok-container');
+                gembokUI.style.display = 'block';
+                document.getElementById('gembok-feedback').innerText = "";
+
+                // Tombol ENTER Sandi
+                document.getElementById('gembok-btn').onclick = () => {
+                    let d1 = document.getElementById('digit1').value;
+                    let d2 = document.getElementById('digit2').value;
+                    let d3 = document.getElementById('digit3').value;
+                    let d4 = document.getElementById('digit4').value;
+                    let d5 = document.getElementById('digit5').value;
+                    let d6 = document.getElementById('digit6').value;
+
+                    let sandi = d1 + d2 + d3 + d4 + d5 + d6;
+
+                    if (sandi === "205035") {
+                        document.getElementById('gembok-feedback').innerText = "SANDI BENAR! GEMBOK TERBUKA!";
+                        document.getElementById('gembok-feedback').style.color = "lime";
+                        setTimeout(() => {
+                            gembokUI.style.display = 'none';
+                            this.scene.start('Babak3');
+                        }, 1500);
+                    } else {
+                        document.getElementById('gembok-feedback').innerText = "SANDI SALAH! AKSES DITOLAK.";
+                        document.getElementById('gembok-feedback').style.color = "red";
+                    }
+                };
+
+                // Tombol BATAL (Agar Dodi tidak terjebak jika ingin hitung ulang)
+                document.getElementById('gembok-close').onclick = () => {
+                    gembokUI.style.display = 'none';
+                    this.gembokSedangAktif = false;
+                    this.dodi.x -= 40; // Terpental mundur
+                    this.physics.resume();
+                };
+            }
         });
     }
 
