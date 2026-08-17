@@ -163,9 +163,13 @@ function tampilkanSoal(scene, soalAcak, callbackBenar, callbackSalah) {
 
 // Fungsi pembantu untuk menggambar pohon
 function gambarPohon(scene, x, y) {
-    let batang = scene.add.rectangle(x, y, 20, 100, 0x5C4033);
-    let daun = scene.add.circle(x, y - 50, 45, 0x228B22);
+    // Memunculkan gambar pohon yang sudah diload sebelumnya
+    let pohon = scene.add.image(x, y - 30, 'pohon');
+    
+    // Mengatur besar kecilnya pohon
+    pohon.setScale(0.8); 
 }
+
 
 // ==========================================
 // KELAS BABAK 1 : TEPI HUTAN 
@@ -186,6 +190,9 @@ class Babak1 extends Phaser.Scene {
         this.load.image('portal', 'https://labs.phaser.io/assets/sprites/diamond.png');
         this.load.image('peti', 'https://labs.phaser.io/assets/sprites/crate.png');
         this.load.image('batu', 'https://labs.phaser.io/assets/sprites/bomb.png');
+        this.load.image('pohon', 'https://labs.phaser.io/assets/sprites/tree-european.png');
+        
+        
     }
 
     create() {
