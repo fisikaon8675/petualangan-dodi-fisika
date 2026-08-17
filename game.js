@@ -284,10 +284,27 @@ class Babak1 extends Phaser.Scene {
     }
 
     update() {
-        if (this.cursors.left.isDown) { this.dodi.setVelocityX(-160); this.dodi.anims.play('left', true); }
-        else if (this.cursors.right.isDown) { this.dodi.setVelocityX(160); this.dodi.anims.play('right', true); }
-        else { this.dodi.setVelocityX(0); this.dodi.anims.play('turn'); }
-        if (this.cursors.up.isDown && this.dodi.body.touching.down) { this.dodi.setVelocityY(-550); }
+        // Kombinasi deteksi Keyboard (komputer) dan Layar Sentuh (HP)
+        if (this.cursors.left.isDown || window.tombolKiri) { 
+            this.dodi.setVelocityX(-160); 
+            this.dodi.anims.play('left', true); 
+        }
+        else if (this.cursors.right.isDown || window.tombolKanan) { 
+            this.dodi.setVelocityX(160); 
+            this.dodi.anims.play('right', true); 
+        }
+        else { 
+            this.dodi.setVelocityX(0); 
+            this.dodi.anims.play('turn'); 
+        }
+        
+        // Logika lompat
+        if ((this.cursors.up.isDown || window.tombolLompat) && this.dodi.body.touching.down) { 
+            this.dodi.setVelocityY(-550); 
+        }
+        
+        // (Khusus di Babak 2 saja, biarkan kode jika jatuh ke sungai tetap ada)
+        // if (this.dodi.y > 600) { this.scene.restart(); } 
     }
 }
 
@@ -394,11 +411,27 @@ class Babak2 extends Phaser.Scene {
     }
 
     update() {
-        if (this.cursors.left.isDown) { this.dodi.setVelocityX(-160); this.dodi.anims.play('left', true); }
-        else if (this.cursors.right.isDown) { this.dodi.setVelocityX(160); this.dodi.anims.play('right', true); }
-        else { this.dodi.setVelocityX(0); this.dodi.anims.play('turn'); }
-        if (this.cursors.up.isDown && this.dodi.body.touching.down) { this.dodi.setVelocityY(-500); }
-        if (this.dodi.y > 600) { this.scene.restart(); } // Pengaman ekstra jika jatuh
+        // Kombinasi deteksi Keyboard (komputer) dan Layar Sentuh (HP)
+        if (this.cursors.left.isDown || window.tombolKiri) { 
+            this.dodi.setVelocityX(-160); 
+            this.dodi.anims.play('left', true); 
+        }
+        else if (this.cursors.right.isDown || window.tombolKanan) { 
+            this.dodi.setVelocityX(160); 
+            this.dodi.anims.play('right', true); 
+        }
+        else { 
+            this.dodi.setVelocityX(0); 
+            this.dodi.anims.play('turn'); 
+        }
+        
+        // Logika lompat
+        if ((this.cursors.up.isDown || window.tombolLompat) && this.dodi.body.touching.down) { 
+            this.dodi.setVelocityY(-550); 
+        }
+        
+        // (Khusus di Babak 2 saja, biarkan kode jika jatuh ke sungai tetap ada)
+        if (this.dodi.y > 600) { this.scene.restart(); } 
     }
 }
 
@@ -485,10 +518,27 @@ class Babak3 extends Phaser.Scene {
     }
 
     update() {
-        if (this.cursors.left.isDown) { this.dodi.setVelocityX(-160); this.dodi.anims.play('left', true); }
-        else if (this.cursors.right.isDown) { this.dodi.setVelocityX(160); this.dodi.anims.play('right', true); }
-        else { this.dodi.setVelocityX(0); this.dodi.anims.play('turn'); }
-        if (this.cursors.up.isDown && this.dodi.body.touching.down) { this.dodi.setVelocityY(-550); }
+        // Kombinasi deteksi Keyboard (komputer) dan Layar Sentuh (HP)
+        if (this.cursors.left.isDown || window.tombolKiri) { 
+            this.dodi.setVelocityX(-160); 
+            this.dodi.anims.play('left', true); 
+        }
+        else if (this.cursors.right.isDown || window.tombolKanan) { 
+            this.dodi.setVelocityX(160); 
+            this.dodi.anims.play('right', true); 
+        }
+        else { 
+            this.dodi.setVelocityX(0); 
+            this.dodi.anims.play('turn'); 
+        }
+        
+        // Logika lompat
+        if ((this.cursors.up.isDown || window.tombolLompat) && this.dodi.body.touching.down) { 
+            this.dodi.setVelocityY(-550); 
+        }
+        
+        // (Khusus di Babak 2 saja, biarkan kode jika jatuh ke sungai tetap ada)
+        // if (this.dodi.y > 600) { this.scene.restart(); } 
     }
 }
 
