@@ -189,19 +189,20 @@ class Babak1 extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 300, 'bg1'); // Latar Siang
-        
-        // Hiasan Pohon di latar belakang
+        // Set background penuh 1066x600
+        this.add.image(533, 300, 'bg1').setDisplaySize(1066, 600); 
+        // Hiasan Pohon diratakan sepanjang layar 1066px
         gambarPohon(this, 100, 480);
-        gambarPohon(this, 300, 480);
-        gambarPohon(this, 500, 480);
+        gambarPohon(this, 350, 480);
         gambarPohon(this, 650, 480);
+        gambarPohon(this, 900, 480);
 
         this.add.text(16, 16, 'Babak 1: Jawab 3 Tantangan di Hutan!', { fontSize: '20px', fill: '#000', fontStyle: 'bold', backgroundColor: '#fff' });
 
-        this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(400, 568, 'tanah').setScale(2).refreshBody();
 
+        this.platforms = this.physics.add.staticGroup();
+        // Tanah membentang penuh sepanjang 1066px
+        this.platforms.create(533, 568, 'tanah').setDisplaySize(1066, 64).refreshBody();
         this.dodi = this.physics.add.sprite(50, 450, 'dodi');
         this.dodi.setBounce(0.2);
         this.dodi.setCollideWorldBounds(true);
