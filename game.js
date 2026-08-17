@@ -316,15 +316,16 @@ class Babak2 extends Phaser.Scene {
     constructor() { super('Babak2'); }
 
     create() {
-        this.add.image(400, 300, 'bg2'); // Latar Awan Sore
-        
-        // Buat Air Sungai di bagian bawah
-        let airSungai = this.add.rectangle(400, 580, 800, 60, 0x1E90FF);
-        this.physics.add.existing(airSungai, true); // Menjadikannya objek statis
-        
-        // Hiasan Pohon di tepi kiri dan kanan
+        // Set background penuh 1066x600
+        this.add.image(533, 300, 'bg2').setDisplaySize(1066, 600); 
+
+        // Air Sungai membentang penuh 1066px
+        let airSungai = this.add.rectangle(533, 580, 1066, 60, 0x1E90FF);
+        this.physics.add.existing(airSungai, true);
+
+        // Hiasan Pohon tepi sungai
         gambarPohon(this, 80, 480);
-        gambarPohon(this, 720, 480);
+        gambarPohon(this, 980, 480);
 
         this.add.text(16, 16, 'Babak 2: Bangun Jembatan di Atas Sungai!', { fontSize: '20px', fill: '#000', fontStyle: 'bold', backgroundColor: '#fff' });
 
@@ -349,7 +350,9 @@ class Babak2 extends Phaser.Scene {
         this.bintangGroup = this.physics.add.group({ key: 'bintang', repeat: 2, setXY: { x: 120, y: 400, stepX: 70 } });
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
-        this.portal = this.physics.add.image(750, 450, 'portal');
+        // Portal dipindah ke ujung kanan layar baru
+        this.portal = this.physics.add.image(980, 450, 'portal');
+
         this.physics.add.collider(this.portal, this.platforms);
         this.portal.setVisible(false);
         this.punyaToken = false;
