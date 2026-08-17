@@ -456,7 +456,15 @@ class Babak3 extends Phaser.Scene {
 }
 
 const config = {
-    type: Phaser.AUTO, width: 800, height: 600, parent: 'game-container',
+    type: Phaser.AUTO,
+    // Pengaturan Skala 16:9 dan Auto-Fit untuk HP
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1066, // Lebar 16:9
+        height: 600  // Tinggi tetap 600
+    },
+    parent: 'game-container',
     physics: { default: 'arcade', arcade: { gravity: { y: 800 }, debug: false } },
     scene: [Babak1, Babak2, Babak3] 
 };
