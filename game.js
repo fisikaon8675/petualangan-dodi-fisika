@@ -167,7 +167,7 @@ function gambarPohon(scene, x, y) {
     let pohon = scene.add.image(x, y - 30, 'pohon');
     
     // Mengatur besar kecilnya pohon
-    pohon.setScale(0.8); 
+    pohon.setScale(1.8); 
 }
 
 
