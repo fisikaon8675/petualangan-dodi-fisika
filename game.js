@@ -446,16 +446,19 @@ class Babak3 extends Phaser.Scene {
     constructor() { super('Babak3'); }
 
     create() {
-        this.add.image(400, 300, 'bg3'); // Latar Senja/Sunset
-
+        // Set background penuh 1066x600
+        this.add.image(533, 300, 'bg3').setDisplaySize(1066, 600); 
+        
         this.add.text(16, 16, 'Babak 3: Lepaskan Meriam untuk Menyelamatkan Orangutan!', { fontSize: '20px', fill: '#000', fontStyle: 'bold', backgroundColor: '#fff' });
 
         this.platforms = this.physics.add.staticGroup();
-        this.platforms.create(400, 568, 'tanah').setScale(2).refreshBody(); 
-        this.platforms.create(700, 350, 'tanah').setScale(0.5).refreshBody();
+        // Tanah membentang penuh sepanjang 1066px
+        this.platforms.create(533, 568, 'tanah').setDisplaySize(1066, 64).refreshBody();
+        // Pijakan markas pemburu dipindah ke area kanan layar baru (x: 900)
+        this.platforms.create(900, 350, 'tanah').setScale(0.5).refreshBody();
 
         // Pohon gundul / markas
-        gambarPohon(this, 750, 270);
+        gambarPohon(this, 950, 270);
 
         this.dodi = this.physics.add.sprite(50, 450, 'dodi');
         this.dodi.setBounce(0.2);
@@ -469,10 +472,10 @@ class Babak3 extends Phaser.Scene {
         this.physics.add.collider(this.bintangGroup, this.platforms);
 
         // Orangutan (disembunyikan di dalam peti)
-        this.orangutan = this.physics.add.sprite(700, 250, 'pemburu').setTint(0xffa500).setVisible(false); 
+        this.orangutan = this.physics.add.sprite(900, 250, 'pemburu').setTint(0xffa500).setVisible(false); 
         this.physics.add.collider(this.orangutan, this.platforms);
 
-        this.peti = this.physics.add.image(700, 250, 'peti').setScale(1.5);
+        this.peti = this.physics.add.image(900, 250, 'peti').setScale(1.5);
         this.physics.add.collider(this.peti, this.platforms);
 
         this.physics.add.overlap(this.dodi, this.bintangGroup, (dodi, bintang) => {
