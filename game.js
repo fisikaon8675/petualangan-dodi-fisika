@@ -332,7 +332,7 @@ class Babak2 extends Phaser.Scene {
         this.platforms = this.physics.add.staticGroup();
         // Tanah awal dan akhir saja
         this.platforms.create(100, 550, 'tanah').setScale(0.5, 1).refreshBody(); 
-        this.platforms.create(700, 550, 'tanah').setScale(0.5, 1).refreshBody();
+        this.platforms.create(968, 550, 'tanah').setScale(0.5, 1).refreshBody();
 
         this.dodi = this.physics.add.sprite(50, 400, 'dodi');
         this.dodi.setBounce(0.2);
