@@ -48,6 +48,43 @@ const gembokHTML = `
 </div>
 `;
 if (!document.getElementById('gembok-container')) document.body.insertAdjacentHTML('beforeend', gembokHTML);
+// ==========================================
+// KONTROL LAYAR SENTUH (HP)
+// ==========================================
+const touchUI = `
+<div id="touch-controls" style="position:absolute; bottom:20px; left:0; width:100%; display:flex; justify-content:space-between; padding:0 40px; box-sizing:border-box; z-index:100; pointer-events:none;">
+    <div style="display:flex; gap:20px; pointer-events:auto;">
+        <button id="btn-kiri" style="width:70px; height:70px; font-size:35px; border-radius:50%; background:rgba(255,255,255,0.6); border:3px solid #333; cursor:pointer;">⬅️</button>
+        <button id="btn-kanan" style="width:70px; height:70px; font-size:35px; border-radius:50%; background:rgba(255,255,255,0.6); border:3px solid #333; cursor:pointer;">➡️</button>
+    </div>
+    <div style="pointer-events:auto;">
+        <button id="btn-lompat" style="width:70px; height:70px; font-size:35px; border-radius:50%; background:rgba(255,255,255,0.6); border:3px solid #333; cursor:pointer;">⬆️</button>
+    </div>
+</div>
+`;
+// Menambahkan UI ke layar jika belum ada
+if (!document.getElementById('touch-controls')) document.body.insertAdjacentHTML('beforeend', touchUI);
+
+// Variabel Global untuk membaca tombol
+window.tombolKiri = false;
+window.tombolKanan = false;
+window.tombolLompat = false;
+
+// Fungsi pembantu membaca sentuhan (Touch) dan klik (Mouse)
+function pasangTombol(id, namaVariabel) {
+    let btn = document.getElementById(id);
+    // Untuk HP
+    btn.addEventListener('touchstart', (e) => { e.preventDefault(); window[namaVariabel] = true; });
+    btn.addEventListener('touchend', (e) => { e.preventDefault(); window[namaVariabel] = false; });
+    // Untuk Komputer (bisa diklik)
+    btn.addEventListener('mousedown', (e) => { window[namaVariabel] = true; });
+    btn.addEventListener('mouseup', (e) => { window[namaVariabel] = false; });
+    btn.addEventListener('mouseleave', (e) => { window[namaVariabel] = false; });
+}
+
+pasangTombol('btn-kiri', 'tombolKiri');
+pasangTombol('btn-kanan', 'tombolKanan');
+pasangTombol('btn-lompat', 'tombolLompat');
 
 // ==========================================
 // DATA BANK SOAL FISIKA (BINTANG)
